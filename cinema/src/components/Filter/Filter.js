@@ -1,17 +1,19 @@
 import React from 'react';
+import './Filter.css';
 
-const Filter = ({ onFilterChange }) => {
+const Filter = ({ categories, setFilter }) => {
     return (
-        <div>
-            <select onChange={(e) => onFilterChange(e.target.value)}>
-                {/* Categories should be dynamic, but here's a basic dropdown for now */}
+        <div className="filterContainer">
+            <select onChange={(e) => setFilter(e.target.value)}>
                 <option value="all">All</option>
-                <option value="action">Action</option>
-                <option value="comedy">Comedy</option>
-                {/* ... other categories ... */}
+                {categories.map(category => (
+                    <option key={category.id} value={category.title}>
+                        {category.title}
+                    </option>
+                ))}
             </select>
         </div>
     );
-}
+};
 
 export default Filter;
