@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const BookingForm = ({ users, addPerson, removePerson, occupiedSeatsData }) => {
+const BookingForm = ({ users, bookings, addPerson, removePerson, occupiedSeatsData }) => {
   const [form, setForm] = useState({ firstName: '', lastName: '', age: '', seat: '' });
 
   const availableSeats = Array.from({ length: occupiedSeatsData?.total || 0 })
@@ -36,9 +36,9 @@ const BookingForm = ({ users, addPerson, removePerson, occupiedSeatsData }) => {
       </form>
       <div>
         <h2>Booked Customers</h2>
-        {users.map((user, i) => (
+        {bookings.map((booking, i) => (
           <div key={i}>
-            {user.firstName}, {user.lastName}, Seat: {user.seat + 1}, Price: SEK {user.age > 65 ? 75 : user.age < 12 ? 65 : 85}
+            {booking.firstName}, {booking.lastName}, Seat: {booking.seat}, Price: SEK {booking.age > 65 ? 75 : booking.age < 12 ? 65 : 85}
             <button onClick={() => removePerson(i)}>Remove</button>
           </div>
         ))}
