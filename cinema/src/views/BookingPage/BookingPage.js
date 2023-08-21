@@ -8,6 +8,8 @@ const BookingPage = () => {
   const { screeningId } = useParams();
   const [occupiedSeatsData, setOccupiedSeatsData] = useState(null);
   const [users, setUsers] = useState([]);
+  const [bookings, setBookings] = useState([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +42,14 @@ const BookingPage = () => {
       occupiedSeats: occupiedSeatsData.occupiedSeats + ", " + person.seat
     });
     setUsers([...users, person]);
+
+    // Add the new booking information to the bookings state
+  const newBooking = {
+    screeningId: screeningId,
+    ...person,
+    seat: parseInt(person.seat) + 1 // Correcting the seat number
+  };
+  setBookings([...bookings, newBooking]);
   }
 
   const removePerson = (index) => {
@@ -59,14 +69,14 @@ const BookingPage = () => {
           <div 
             key={i}
             className={`seat ${occupiedSeatsData?.occupiedSeats.split(", ").includes(i.toString()) ? 'occupied' : 'available'}`}
-            style={{order: i % 15 }}
+            
           >
             {i + 1}
           </div>
         ))}
       </div>
-      <BookingForm users={users} addPerson={addPerson} removePerson={removePerson} occupiedSeatsData={occupiedSeatsData} />
-      <div className="totalPrice">
+      <BookingForm users={users} bookings={bookings} addPerson={addPerson} removePerson={removePerson} occupiedSeatsData={occupiedSeatsData} />
+    <div className="totalPrice">
         Total Price: SEK {calculatePrice()}
       </div>
       <Link to="/receipt">
