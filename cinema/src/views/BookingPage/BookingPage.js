@@ -20,7 +20,6 @@ const BookingPage = () => {
         } else {
           console.warn(`No occupied seats found for screening ID: ${screeningId}`);
         }
-
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -28,14 +27,16 @@ const BookingPage = () => {
     fetchData();
   }, [screeningId]);
 
-  const addPerson = () => {
-    setUsers([...users, { firstName: '', lastName: '', age: '', seat: '' }]);
+  const calculatePrice = () => {
+    return users.reduce((total, user) => {
+      if (user.age > 65) return total + 75;
+      if (user.age < 12) return total + 65;
+      return total + 85;
+    }, 0);
   }
 
-  const handleInputChange = (index, field, value) => {
-    const newUsers = [...users];
-    newUsers[index][field] = value;
-    setUsers(newUsers);
+  const addPerson = (person) => {
+    setUsers([...users, person]);
   }
 
   return (
@@ -49,16 +50,14 @@ const BookingPage = () => {
             key={i}
             className={`seat ${occupiedSeatsData?.occupiedSeats.split(", ").includes(i.toString()) ? 'occupied' : 'available'}`}
           >
-            {i}
+            {i + 1}
           </div>
         ))}
       </div>
-      <BookingForm users={users} handleInputChange={handleInputChange} addPerson={addPerson} />
-
+      <BookingForm users={users} addPerson={addPerson} occupiedSeatsData={occupiedSeatsData} />
       <div className="totalPrice">
-        {/* Calculate and display total price */}
+        Total Price: SEK {calculatePrice()}
       </div>
-
       <Link to="/receipt">
         <button>Proceed with Order</button>
       </Link>

@@ -1,65 +1,48 @@
 .bookingPage {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  h2, h3 {
-    margin: 10px 0;
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
   }
   
   .seatsContainer {
     display: flex;
     flex-wrap: wrap;
-    margin: 20px 0;
+    justify-content: center;
   }
   
   .seat {
-    width: 30px;
-    height: 30px;
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #000;
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+    background-color: green;
   }
   
   .seat.occupied {
     background-color: red;
   }
   
-  .seat.available {
-    background-color: green;
-    cursor: pointer;
+  .userForm, .newUserForm {
+    margin-bottom: 10px;
   }
   
-  .bookingForm .userForm {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  
-  .bookingForm input,
-  .bookingForm select {
-    padding: 10px;
-    margin: 5px 0;
+  .userDetails {
+    padding: 5px;
     border: 1px solid #ccc;
+    margin: 5px;
   }
   
   .totalPrice {
-    margin: 20px 0;
+    font-size: 18px;
     font-weight: bold;
+    margin: 15px 0;
   }
   
-  button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  .bookingForm {
+    max-width: 500px;
+    margin: auto;
   }
   
-  button:hover {
-    background-color: #0056b3;
+  input, select, button {
+    margin: 5px;
   }
   
