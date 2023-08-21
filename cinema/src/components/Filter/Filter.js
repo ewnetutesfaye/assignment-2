@@ -16,4 +16,5 @@ const Filter = ({ categories, setFilter }) => {
     );
 };
 
+
 export default Filter;
