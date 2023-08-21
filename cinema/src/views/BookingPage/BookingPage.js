@@ -8,6 +8,7 @@ const BookingPage = () => {
   const { screeningId } = useParams();
   const [occupiedSeatsData, setOccupiedSeatsData] = useState(null);
   const [users, setUsers] = useState([]);
+  const [occupiedSeats, setOccupiedSeats] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,6 +17,7 @@ const BookingPage = () => {
         const specificScreeningSeats = allSeatsData.find(seat => seat.screeningId.toString() === screeningId);
         if (specificScreeningSeats) {
           setOccupiedSeatsData(specificScreeningSeats);
+          setOccupiedSeats(specificScreeningSeats.occupiedSeats);
         } else {
           console.warn(`No occupied seats found for screening ID: ${screeningId}`);
         }
@@ -24,7 +26,7 @@ const BookingPage = () => {
       }
     };
     fetchData();
-  }, [screeningId]);
+  }, []);
 
   const calculatePrice = () => {
     return users.reduce((total, user) => {
@@ -35,19 +37,24 @@ const BookingPage = () => {
   }
 
   const addPerson = (person) => {
+    const updatedOccupiedSeats = [...occupiedSeatsData.occupiedSeats, parseInt(person.seat)];
     setOccupiedSeatsData({
       ...occupiedSeatsData,
-      occupiedSeats: occupiedSeatsData.occupiedSeats + ", " + person.seat
+      occupiedSeats: updatedOccupiedSeats,
     });
     setUsers([...users, person]);
-  }
-
+  };
+  
   const removePerson = (index) => {
-    const seatToRemove = users[index].seat;
-    const updatedOccupiedSeats = occupiedSeatsData.occupiedSeats.split(", ").filter(seat => seat !== seatToRemove.toString()).join(", ");
-    setOccupiedSeatsData({ ...occupiedSeatsData, occupiedSeats: updatedOccupiedSeats });
+    const seatToRemove = parseInt(users[index].seat);
+    const updatedOccupiedSeats = occupiedSeatsData.occupiedSeats.filter(seat => seat !== seatToRemove);
+    setOccupiedSeatsData({
+      ...occupiedSeatsData,
+      occupiedSeats: updatedOccupiedSeats,
+    });
     setUsers(users.filter((_, i) => i !== index));
-  }
+  };
+  
 
   return (
     <div className="bookingPage">
@@ -55,16 +62,17 @@ const BookingPage = () => {
       <h3>Date: {occupiedSeatsData?.screeningTime.slice(0, 10)}, Time: {occupiedSeatsData?.screeningTime.slice(11, 16)}</h3>
       <h2>{occupiedSeatsData?.auditorium}</h2>
       <div className="seatsContainer">
-        {Array.from({ length: occupiedSeatsData?.total || 0 }).map((_, i) => (
-          <div 
-            key={i}
-            className={`seat ${occupiedSeatsData?.occupiedSeats.split(", ").includes(i.toString()) ? 'occupied' : 'available'}`}
-            style={{order: i % 15 }}
-          >
-            {i + 1}
-          </div>
-        ))}
-      </div>
+  {Array.from({ length: occupiedSeatsData?.total || 0 }).map((_, i) => (
+    <div 
+      key={i}
+      className={`seat ${occupiedSeatsData?.occupiedSeats.includes(i) ? 'occupied' : 'available'}`}
+      style={{order: i}}
+    >
+      {i + 1}
+    </div>
+  ))}
+</div>
+
       <BookingForm users={users} addPerson={addPerson} removePerson={removePerson} occupiedSeatsData={occupiedSeatsData} />
       <div className="totalPrice">
         Total Price: SEK {calculatePrice()}
