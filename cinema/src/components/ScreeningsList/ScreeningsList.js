@@ -1,7 +1,11 @@
 import React from 'react';
 import "./ScreeningsList.css";
+import { useHistory, Link } from "react-router-dom";
 
 const ScreeningsList = ({ screenings, movies, auditoriums }) => {
+
+
+    
     return (
         <div className='ScreeningsList-box'>
             {screenings.map(screening => (
@@ -11,7 +15,7 @@ const ScreeningsList = ({ screenings, movies, auditoriums }) => {
                     <p>{new Date(screening.time).toLocaleString()}</p>
                     <p>{movies[screening.movieId]?.description.length} minutes</p>
                     <p>Auditorium: {auditoriums[screening.auditoriumId]?.name}</p>
-                    {/* Link to booking page can be added here */}
+                    <Link to={`/booking/${screening.id}`}><button>BOOK</button></Link>
                 </div>
             ))}
         </div>
