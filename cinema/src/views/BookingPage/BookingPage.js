@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import { fetchOccupiedSeats } from '../../tools/dataFetcher';
 import BookingForm from '../../components/Booking/Booking';
 import './BookingPage.css';
@@ -9,6 +9,37 @@ const BookingPage = () => {
   const [occupiedSeatsData, setOccupiedSeatsData] = useState(null);
   const [users, setUsers] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const navigate = useNavigate();
+
+  // Function to generate booking number
+  const generateBookingNumber = () => {
+    return (
+      users[0]?.firstName.charAt(0).toUpperCase() +
+      users[0]?.lastName.substring(0, 2).toUpperCase() +
+      Math.floor(Math.random() * 1000)
+    );
+  };
+
+  // Function to package booking info
+  const packageBookingInfo = () => {
+    const totalPrice = calculatePrice();
+    const bookingNumber = generateBookingNumber();
+    return {
+      bookings,
+      screeningId,
+      totalPrice,
+      bookingNumber,
+      movie: occupiedSeatsData?.movie, // Adding movie name
+      screeningTime: occupiedSeatsData?.screeningTime, // Adding screening time
+      auditorium: occupiedSeatsData?.auditorium, // Adding auditorium
+    };
+  };
+  
+
+  const handleProceedOrder = () => {
+    const bookingInfo = packageBookingInfo();
+    navigate("/receipt", { state: { bookingInfo } });
+  };
 
 
   useEffect(() => {
@@ -43,21 +74,30 @@ const BookingPage = () => {
     });
     setUsers([...users, person]);
 
-    // Add the new booking information to the bookings state
-  const newBooking = {
-    screeningId: screeningId,
-    ...person,
-    seat: parseInt(person.seat) + 1 // Correcting the seat number
-  };
-  setBookings([...bookings, newBooking]);
+        // Add the new booking information to the bookings state
+    const newBooking = {
+        screeningId: screeningId,
+        ...person,
+        seat: parseInt(person.seat) + 1 // Correcting the seat number
+    };
+    setBookings([...bookings, newBooking]);
   }
 
   const removePerson = (index) => {
+    if (users.length <= 0) return; // Return early if no users to remove
+  
     const seatToRemove = users[index].seat;
     const updatedOccupiedSeats = occupiedSeatsData.occupiedSeats.split(", ").filter(seat => seat !== seatToRemove.toString()).join(", ");
     setOccupiedSeatsData({ ...occupiedSeatsData, occupiedSeats: updatedOccupiedSeats });
+  
+    // Remove the corresponding booking
+    const updatedBookings = bookings.filter((_, i) => i !== index);
+    setBookings(updatedBookings);
+  
+    // Remove the user from the users state
     setUsers(users.filter((_, i) => i !== index));
-  }
+  };
+  
 
   return (
     <div className="bookingPage">
@@ -79,9 +119,7 @@ const BookingPage = () => {
     <div className="totalPrice">
         Total Price: SEK {calculatePrice()}
       </div>
-      <Link to="/receipt">
-        <button>Proceed with Order</button>
-      </Link>
+        <button onClick={handleProceedOrder}>Proceed with Order</button>
     </div>
   );
 }

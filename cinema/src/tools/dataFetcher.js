@@ -5,7 +5,6 @@ const BASE_URL = 'https://cinema-rest.nodehill.se/api';
 const handleResponse = async (endpoint) => {
   try {
     const response = await axios.get(`${BASE_URL}${endpoint}`);
-    console.log("data -> ", response.data);
     return response.data;
   } catch (error) {
     console.error(`Error fetching data from ${BASE_URL}${endpoint}: `, error);

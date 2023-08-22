@@ -19,7 +19,8 @@ const BookingForm = ({ users, bookings, addPerson, removePerson, occupiedSeatsDa
     addPerson(form);
     setForm({ firstName: '', lastName: '', age: '', seat: '' });
   }
-
+  
+  
   return (
     <div className="bookingForm">
       <form>
@@ -39,7 +40,7 @@ const BookingForm = ({ users, bookings, addPerson, removePerson, occupiedSeatsDa
         {bookings.map((booking, i) => (
           <div key={i}>
             {booking.firstName}, {booking.lastName}, Seat: {booking.seat}, Price: SEK {booking.age > 65 ? 75 : booking.age < 12 ? 65 : 85}
-            <button onClick={() => removePerson(i)}>Remove</button>
+            {bookings.length > 0 && <button onClick={() => removePerson(i)}>Remove</button>} {/* Only render the button if bookings.length is greater than 0 */}
           </div>
         ))}
       </div>
