@@ -1,8 +1,7 @@
 # assignment-2
  Feature Flicks - The Cinema
 
-
- requirements
+Requirements
 
 Requirements:
 Node.js: Ensure Node.js is installed on your system as it comes with npm (Node Package Manager), which is needed to manage the dependencies.
