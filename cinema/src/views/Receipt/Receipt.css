@@ -1,0 +1,45 @@
+.receipt-container {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .receipt-container h1 {
+    color: #333;
+    font-size: 24px;
+  }
+  
+  .receipt-container h2,
+  .receipt-container h3,
+  .receipt-container h4 {
+    color: #444;
+    margin-top: 20px;
+  }
+  
+  .receipt-container hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+  }
+  
+  .receipt-container p {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .receipt-container > div {
+    margin: 10px 0;
+  }
+  
+  .receipt-container > div > div {
+    padding: 10px;
+    background-color: #f1f1f1;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  

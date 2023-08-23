@@ -1,12 +1,13 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import "./Receipt.css"
 
 const ReceiptPage = () => {
   const location = useLocation();
   const { bookingInfo } = location.state;
 
   return (
-    <div>
+    <div className="receipt-container">
       <h1>Booking Confirmation</h1>
 
       <hr></hr>

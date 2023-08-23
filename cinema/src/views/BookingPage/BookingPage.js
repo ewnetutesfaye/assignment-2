@@ -103,7 +103,7 @@ const BookingPage = () => {
     const newBooking = {
         screeningId: screeningId,
         ...person,
-        seat: parseInt(person.seat) + 1 // Correcting the seat number
+        seat: parseInt(person.seat)// Correcting the seat number
     };
     setBookings([...bookings, newBooking]);
   }
@@ -111,8 +111,8 @@ const BookingPage = () => {
   const removePerson = (index) => {
     if (users.length <= 0) return; // Return early if no users to remove
   
-    const seatToRemove = users[index].seat;
-    const updatedOccupiedSeats = occupiedSeatsData.occupiedSeats.split(", ").filter(seat => seat !== seatToRemove.toString()).join(", ");
+    const seatToRemove = (parseInt(users[index].seat)).toString(); // Correct the seat number
+    const updatedOccupiedSeats = occupiedSeatsData.occupiedSeats.split(", ").filter(seat => seat !== seatToRemove).join(", ");
     setOccupiedSeatsData({ ...occupiedSeatsData, occupiedSeats: updatedOccupiedSeats });
   
     // Remove the corresponding booking
@@ -122,6 +122,7 @@ const BookingPage = () => {
     // Remove the user from the users state
     setUsers(users.filter((_, i) => i !== index));
   };
+  
 
 
 
@@ -130,11 +131,15 @@ const BookingPage = () => {
 
   return (
     <div className="bookingPage">
-      <h1>{occupiedSeatsData?.movie}</h1>
-      <h3>Date: {occupiedSeatsData?.screeningTime.slice(0, 10)}, Time: {occupiedSeatsData?.screeningTime.slice(11, 16)}</h3>
-      <h2>{occupiedSeatsData?.auditorium}</h2>
+      <h1>Movie -    {occupiedSeatsData?.movie}</h1>
+      <h5>{occupiedSeatsData?.screeningTime.slice(0, 10)},    {occupiedSeatsData?.screeningTime.slice(11, 16)}</h5>
+      <h6>Auditorium - {occupiedSeatsData?.auditorium}</h6>
 
       <hr></hr>
+
+      <h5>
+        ----------| Screen |----------  
+      </h5> <br></br>
 
       <div className="seatsContainer">
   {Array.from({ length: getNumberOfRows(occupiedSeatsData?.auditorium) }).map((_, rowIndex) => (
@@ -158,10 +163,10 @@ const BookingPage = () => {
 
       <BookingForm users={users} bookings={bookings} addPerson={addPerson} removePerson={removePerson} occupiedSeatsData={occupiedSeatsData} />
       <hr></hr>
-    <div className="totalPrice">
+        <div className="totalPrice">
         Total Price: SEK {calculatePrice()}
+        <button id='Proceed' onClick={handleProceedOrder} disabled={bookings.length === 0}>Proceed with Order</button>
       </div>
-        <button onClick={handleProceedOrder}>Proceed with Order</button>
     </div>
   );
 }
