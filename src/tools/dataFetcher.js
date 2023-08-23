@@ -12,7 +12,6 @@ const handleResponse = async (endpoint) => {
   }
 };
 
-
 export const fetchBookingsOverview = () => handleResponse(`/bookings_overview`);
 
 export const fetchOccupiedSeats = () => handleResponse(`/occupied_seats`);
