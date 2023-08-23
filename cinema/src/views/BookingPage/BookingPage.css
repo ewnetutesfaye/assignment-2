@@ -6,7 +6,11 @@
   
   .seatsContainer {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  
+  .seatRow {
+    display: flex;
     justify-content: center;
   }
   

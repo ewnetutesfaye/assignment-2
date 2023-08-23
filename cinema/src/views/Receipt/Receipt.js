@@ -8,12 +8,15 @@ const ReceiptPage = () => {
   return (
     <div>
       <h1>Booking Confirmation</h1>
+
+      <hr></hr>
       <p>Movie: {bookingInfo.movie}</p>
       <p>Date: {bookingInfo.screeningTime.slice(0, 10)}, Time: {bookingInfo.screeningTime.slice(11, 16)}</p>
       <p>Auditorium: {bookingInfo.auditorium}</p>
       <h4>Screening ID: {bookingInfo.screeningId}</h4>
       <h4>Total Price: SEK {bookingInfo.totalPrice}</h4>
       <h3>Booking Number: {bookingInfo.bookingNumber}</h3>
+      <hr></hr>
       <div>
         <h2>Booked Customers</h2>
         {bookingInfo.bookings.map((booking, i) => (
@@ -22,6 +25,7 @@ const ReceiptPage = () => {
           </div>
         ))}
       </div>
+      <hr></hr>
       <p>Please note that the payment will be done at the cinema. Show your booking number to the staff when you arrive.</p>
     </div>
   );

@@ -10,63 +10,44 @@
 .homeDiv {
     width: 100%;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     padding-top: 50px;
     background: linear-gradient(135deg, #ece9e6, #ffffff);
     font-family: 'Arial', sans-serif;
 }
 
 .errorDiv {
-    color: #fff;
     font-size: 1.5rem;
     text-align: center;
     margin-top: 40px;
-    padding: 20px 40px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #f94f4f;
     transition: all 0.3s ease-in-out;
 }
 
 .errorDiv:hover {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-3px);
 }
+
+/* Bootstrap overrides */
 
 .filterContainer {
     margin-bottom: 20px;
     padding: 10px 20px;
-    border-radius: 8px;
     background-color: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .filterContainer select {
     width: 200px;
     padding: 10px 15px;
-    font-size: 1rem;
-    border: none;
     border-radius: 5px;
     background: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease-in-out;
     cursor: pointer;
 }
 
 .filterContainer select:focus {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     outline: none;
     background: #ffffff;
 }
 
 .filterContainer select:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 }
-
-.filterContainer select option {
-    padding: 10px;
-}
-

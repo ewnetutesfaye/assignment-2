@@ -3,6 +3,7 @@ import ScreeningsList from '../../components/ScreeningsList/ScreeningsList';
 import Filter from '../../components/Filter/Filter';
 import { fetchScreenings, fetchMovies, fetchAuditoriums, fetchCategories } from '../../tools/dataFetcher';
 import './Home.css';
+import { Container, Alert } from 'react-bootstrap';
 
 const Home = () => {
     const [screenings, setScreenings] = useState([]);
@@ -17,6 +18,8 @@ const Home = () => {
         const movie = movies[screening.movieId];
         return movie?.description?.categories?.includes(selectedFilter);
     });
+
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,14 +44,14 @@ const Home = () => {
     }, []);
 
     if (error) {
-        return <div className="errorDiv">{error}</div>;
+        return <Alert variant="danger" className="errorDiv">{error}</Alert>;
     }
 
     return (
-        <div className='homeDiv'>
+        <Container fluid className="homeDiv">
             <Filter setFilter={setSelectedFilter} categories={categories} />
             <ScreeningsList screenings={filteredScreenings} movies={movies} auditoriums={auditoriums} />
-        </div>
+        </Container>
     );
 }
 

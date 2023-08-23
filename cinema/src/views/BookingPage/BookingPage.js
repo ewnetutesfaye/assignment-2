@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate} from 'react-router-dom';
-import { fetchOccupiedSeats } from '../../tools/dataFetcher';
+import { fetchOccupiedSeats, fetchSeats, fetchAuditoriums } from '../../tools/dataFetcher';
 import BookingForm from '../../components/Booking/Booking';
 import './BookingPage.css';
 
@@ -10,6 +10,9 @@ const BookingPage = () => {
   const [users, setUsers] = useState([]);
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
+  const [seatsData, setSeatsData] = useState([]);
+  const [auditoriums, setAuditoriums] = useState([]); // For holding the auditoriums
+
 
   // Function to generate booking number
   const generateBookingNumber = () => {
@@ -19,6 +22,21 @@ const BookingPage = () => {
       Math.floor(Math.random() * 1000)
     );
   };
+
+  const getAuditoriumIdByName = (name) => {
+    const auditorium = auditoriums.find(aud => aud.name === name);
+    return auditorium ? auditorium.id : null;
+  };
+  const getSeatsInAuditorium = (auditoriumName) => {
+    const auditoriumId = getAuditoriumIdByName(auditoriumName);
+    return seatsData.filter(seat => seat.auditoriumId === auditoriumId);
+  };
+
+  const getNumberOfRows = (auditoriumId) => {
+    const seatsInAuditorium = getSeatsInAuditorium(auditoriumId);
+    return Math.max(...seatsInAuditorium.map(seat => seat.rowNumber), 0);
+  };
+
 
   // Function to package booking info
   const packageBookingInfo = () => {
@@ -41,12 +59,19 @@ const BookingPage = () => {
     navigate("/receipt", { state: { bookingInfo } });
   };
 
+  useEffect(() => {
+    fetchAuditoriums().then(data => setAuditoriums(data)); // Fetch the auditoriums
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const allSeatsData = await fetchOccupiedSeats();
         const specificScreeningSeats = allSeatsData.find(seat => seat.screeningId.toString() === screeningId);
+
+        const allSeats = await fetchSeats();
+        setSeatsData(allSeats);
+
         if (specificScreeningSeats) {
           setOccupiedSeatsData(specificScreeningSeats);
         } else {
@@ -97,6 +122,10 @@ const BookingPage = () => {
     // Remove the user from the users state
     setUsers(users.filter((_, i) => i !== index));
   };
+
+
+
+
   
 
   return (
@@ -104,18 +133,31 @@ const BookingPage = () => {
       <h1>{occupiedSeatsData?.movie}</h1>
       <h3>Date: {occupiedSeatsData?.screeningTime.slice(0, 10)}, Time: {occupiedSeatsData?.screeningTime.slice(11, 16)}</h3>
       <h2>{occupiedSeatsData?.auditorium}</h2>
+
+      <hr></hr>
+
       <div className="seatsContainer">
-        {Array.from({ length: occupiedSeatsData?.total || 0 }).map((_, i) => (
-          <div 
-            key={i}
-            className={`seat ${occupiedSeatsData?.occupiedSeats.split(", ").includes(i.toString()) ? 'occupied' : 'available'}`}
-            
+  {Array.from({ length: getNumberOfRows(occupiedSeatsData?.auditorium) }).map((_, rowIndex) => (
+    <div key={rowIndex} className="seatRow">
+      {getSeatsInAuditorium(occupiedSeatsData?.auditorium)
+        .filter(seat => seat.rowNumber === rowIndex + 1)
+        .reverse() // Reversing the order of seats in each row
+        .map((seat, seatIndex) => (
+          <div
+            key={seatIndex}
+            className={`seat ${occupiedSeatsData?.occupiedSeats.split(", ").includes(seat.seatNumber.toString()) ? 'occupied' : 'available'}`}
           >
-            {i + 1}
+            {seat.seatNumber}
           </div>
         ))}
-      </div>
+    </div>
+  ))}
+</div>
+
+<hr></hr>
+
       <BookingForm users={users} bookings={bookings} addPerson={addPerson} removePerson={removePerson} occupiedSeatsData={occupiedSeatsData} />
+      <hr></hr>
     <div className="totalPrice">
         Total Price: SEK {calculatePrice()}
       </div>
